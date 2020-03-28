@@ -1,0 +1,57 @@
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <script>
+        class Chain {
+            #chainList = [];
+
+            static setChainList(chainFunctionList) {
+                this.chainList = chainFunctionList.map((f, i) => {
+                     return f.bind(this, this.getFirstFunction, this.getLastFunction, this.getFunctonAt.bind(this, ++i))
+                });
+            }
+
+            static getLastFunction() {
+                return this.chainList[this.chainList.length-1];
+            }
+
+            static getFirstFunction() {
+                return this.chainList[0];
+            }
+
+            static getFunctonAt(index) {
+                return this.chainList[index] && this.chainList[index]();
+            }
+
+            static getChainList() {
+                return this.chainList;
+            }
+
+            static run(){
+                this.chainList[0]();
+            }
+        }
+        var fn1 = function(firstFn, lastFn, nextFn) {
+            setTimeout(() => {
+                console.log(1);
+                nextFn && nextFn();
+            }, 100)
+        };
+        var fn2 = function(firstFn, lastFn, nextFn) {
+            setTimeout(() => {
+                console.log(2);
+                nextFn && nextFn();
+            }, 200)
+        };
+        var fn3 = function(firstFn, lastFn, nextFn) {
+            setTimeout(() => {
+                console.log(3);
+                nextFn && nextFn();
+            }, 300)
+        };
+        Chain.setChainList([fn1, fn2, fn3])
+        Chain.run();
+
+    </script>
+</body>

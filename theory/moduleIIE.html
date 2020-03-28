@@ -1,0 +1,291 @@
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <script>
+        // IIEA
+        // Паттерн Одиночка (singleton)
+        /*
+        
+        (() => {
+            let singlePanel = null;
+            
+            let Panel = function Panel(...args) {
+                if (singlePanel) {
+                    return singlePanel;
+                }
+                singlePanel = this;                
+                args.forEach((v, i) => this[i] = v);
+                return singlePanel;
+            }
+            let a = new Panel(1, 2, 3);
+            let b = new Panel(4, 5, 6);
+            
+            console.log(a, b);
+            console.log(a === b);
+        })();
+        */
+        
+        // IIEA
+        // Модуль с одним публичным методом (открытый модуль) 
+        // И синглитон
+        
+        /*
+        (() => {
+            let singleton = null; 
+            
+            let Panel = function(type, size) {
+                
+            }
+            return {
+                getPanel: (type, size) => {
+                    if (!singleton) {
+                        singleton = new Panel(type, size)
+                    }
+                    return singleton;
+                }
+            }
+        })()
+        */
+        
+        
+        // IIEA
+        // Паттерн фабрика
+        
+        /*
+        var factory = (function Factory(){
+            var Panel = function(args) {
+                for (let k in args) {
+                    this[k] = args[k];
+                }
+            };
+            Panel.prototype.draw = function() {
+                Object.getOwnPropertyNames(this).forEach((k) => {
+                    console.log(`${k} = ${this[k]}`)
+                });
+            };
+            return {
+                getPanel: (type) => {
+                    return new Panel({
+                        type: type,
+                        size: 'normal-size'
+                    })
+                }
+            }
+        })();
+        [
+            factory.getPanel('little'), 
+            factory.getPanel('big')
+        ].forEach(p => {
+            p.draw();
+        });
+        */
+        
+        // IIEA
+        // Паттерн фабрика. Разные элементы
+        // Плюс использовали общие приватные методы
+        // Передав им нужный контент
+        
+        /*
+        var factory = (function Factory(){
+            var commonInitFn = function(args) {
+                for (let k in args) {
+                    this[k] = args[k];
+                }
+            };
+            var commonDrawFn = function(args) {
+                Object.getOwnPropertyNames(this).forEach((k) => {
+                    console.log(`${k} = ${this[k]}`)
+                });
+            };
+            var SuperPanel = function(args) {
+                commonInitFn.call(this, args);
+            };
+            SuperPanel.prototype.draw = function() {
+                commonDrawFn.call(this);
+            };
+            var Panel = function(args) {
+                commonInitFn.call(this, args);
+            };
+            Panel.prototype.draw = function() {
+                commonDrawFn.call(this);
+            };
+            return {
+                getPanel: (type) => {
+                    switch (type) {
+                        default: 
+                            return new Panel({
+                                type: type,
+                                size: 'normal-size'
+                            });
+                            
+                        case 'super': 
+                            return new SuperPanel({
+                                type: type,
+                                size: 'super-size'
+                            })
+                    }
+                    
+                }
+            }
+        })();
+        [
+            factory.getPanel('simple'), 
+            factory.getPanel('super')
+        ].forEach(p => {
+            p.draw();
+        })
+        */
+       
+       
+       // Примиси
+       // 
+       
+       /*
+       var Panel = function() {
+           
+       };
+       Panel.prototype.erase = function() {
+           
+       };
+       Panel.prototype.draw = function() {
+           
+       };
+       var panel = new Panel();
+       
+       
+       var SuperPanel = function() {
+           
+       }
+       SuperPanel.prototype.draw = function() {
+           
+       }
+       SuperPanel.prototype.erase = function() {
+           
+       }
+       SuperPanel.prototype.collapse = function() {
+           
+       }
+       SuperPanel.prototype.expand = function() {
+           
+       }
+       var superPanel = new SuperPanel();
+       */
+       // Для того, чтобы реализовать такой функционал, мы можем, как и в прошлый раз 
+       // использовать прототипное наследование. 
+       // Но, как вы уже вероятно заметили, делать это не просто. Особенно если следовать 
+       // классической схеме, с функцией конструктором и т.д. 
+       // Примиси. Этот мехнизм частично решает эти задачи 
+       
+       
+       /*
+       var setMixin = function(sourceObject, mixin) {
+           for (prop in mixin) {
+               if (typeof sourceObject.prototype[prop] === 'undefined') {
+                   sourceObject.prototype[prop] = mixin[prop];
+               }
+           }
+       }       
+       var commonPanelMixin = {
+           draw: function() {
+                console.log(`draw: ${this.header},  ${this.content}`);
+           },
+           erase: function() {
+                console.log(`erase: ${this.header}`);
+           }
+       };       
+       var Panel = function(header, content) {
+           this.header = header;
+           this.content = content;
+       };
+       var SuperPanel = function(header, content) {
+           this.header = header;
+           this.content = content;
+       };
+       SuperPanel.prototype.collapse = function() {
+           console.log(`collapse: ${this.text}`);
+       };
+       SuperPanel.prototype.expand = function() {
+           console.log(`expand: ${this.text}`);
+       };
+       setMixin(Panel, commonPanelMixin);
+       setMixin(SuperPanel, commonPanelMixin);
+       
+       [
+           new Panel('залоговок1', 'содержание1'),
+           new SuperPanel('super-залоговок2', 'super-содержание2')
+       ]
+       .forEach(panel => console.log(panel))
+       
+       */
+      
+      
+      // Паттерн Декоратор. Есть еще фасад. Разновидность. 
+      // Используется работу искходных методов класса, но не много егое
+      // Приукрашивают, дополняют 
+      
+      /*
+      var Car = function() {
+          this.getCost = function() {
+              return 200;
+          };
+      };
+      var getCarCostWithTrunk = function(car) {
+        var basicCost = car.getCost();
+
+        car.getCost = function() {
+            return basicCost + 10;
+        };
+      };
+      var getCarCostWithAirConditioner = function(car) {
+        var basicCost = car.getCost();
+        
+        car.getCost = function() {
+            return basicCost + 50;
+        };       
+      };
+      var car = new Car();
+      
+      console.log(car.getCost());      
+      
+      getCarCostWithTrunk(car);
+      console.log(car.getCost());      
+      
+      getCarCostWithAirConditioner(car);
+      console.log(car.getCost());      
+      */
+     
+     
+     // Поведенческие Паттерны
+     // Наблюдатель. Медиатор
+     
+     var Bus = function() {
+         this.events = {};
+     }
+     Bus.prototype.on = function(eventName, handlerFn) {
+         this.events[eventName] = this.events[eventName] || [];
+         this.events[eventName].push(handlerFn);
+     };
+     Bus.prototype.emit = function(eventName) {
+         if (typeof this.events[eventName] !== 'undefined') {
+             this.events[eventName].forEach(handlerFn => handlerFn());
+         }
+     };     
+     var bus = new Bus();
+     
+     var indexPage = (function DashBoard(bus) {
+        bus.on('application-load-complete', () => {
+           console.log('index page module Ready')
+        })
+     })(bus);
+     
+     var aboutPage = (function AboutPage(bus) {
+        bus.on('application-load-complete', () => {
+            console.log('about page module Ready')
+        })
+     })(bus);
+     
+     bus.emit('application-load-complete') // RUN APPLICATION NOW!
+     
+    </script>
+</body>

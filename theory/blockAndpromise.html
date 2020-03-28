@@ -1,0 +1,247 @@
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <script>
+
+        //
+        // Стек событий
+        //
+
+/*
+        var foo = () => console.log('foo');
+
+        var bar = () => console.log('bar');
+
+        var some = () => {
+            console.log('some');
+            foo();
+            bar();
+        }
+
+        some();
+*/
+        //
+        // Стек событий меняем последовательность и event loop
+        //
+/*
+        var foo = () => console.log('foo');
+
+        var bar = () => console.log('bar');
+
+        var some = () => {
+            console.log('some');
+            setTimeout(foo, 0);   // sec
+            bar();
+        }
+
+        some();
+
+
+
+| fn1 |       |     |
+| fn2 |       | list|
+| fn3 |       | el1 |
+=======       =======
+
+CommandStack  EventLoop
+
+*/
+
+       //
+       // Пробуем блокировать
+       //
+       /*
+
+       var f1 = function() {
+           console.log(1);
+       };
+       var f2 = function() {
+           for (var i=0; i<1000000000; i++) {
+
+           }
+           console.log(2);
+       };
+       var f3 = function() {
+           console.log(3);
+       };
+       var queue = [f1, f2, f3];
+
+       queue.forEach(f => f());
+
+*/
+/*
+        var someFunctionForBigCalc() {
+          rerurn 'sss';
+        }
+       var f1 = function() {
+           console.log(1);
+       };
+       var f2 = function() {
+          var result = [];
+
+           for (var i=0; i<1000000000; i++) {
+
+              setTimeout(() => {
+                result.push(someFunctionForBigCalc())
+              }, 0)
+
+           }
+           console.log(result);
+       };
+       var f3 = function() {
+           console.log(3);
+       };
+       var queue = [f1, f2, f3];
+
+       queue.forEach(f => f());
+
+
+*/
+
+/*
+var fn = function(callback) {
+
+}
+var fn1 = function(callback) {
+
+}
+var fn2 = function(callback) {
+
+}
+fn(function(result1, data1) {
+  if (result1) {
+    fn1(function(result2, data2) {
+      if (result2) {
+        fn2(function(result3, data3) {
+          console.log('Finnish')
+        })
+      }
+    })
+  }
+});
+
+// ES5 - ES^
+
+fn(() => {
+  fn2(() => {
+    fn3(() => {
+
+    })
+  }
+})
+
+
+[fn, fn4, f2];
+
+*/
+
+
+
+/*
+
+       // Что делать, если нам нужно
+       // запустить несколько функций при этом
+       // функции делают долгие операции над переменными
+       // Правильный подход
+
+       var f = function(array, fn) {
+           var result = [];
+
+           for (var i=0; i<array.length; i++) {
+               result.push(fn(array[i]))
+           }
+           return result;
+       }
+
+       // Аналогично
+       Array.map((el) => {
+           return {
+
+           }
+       });
+
+*/
+
+        // Как же поступить если надо
+        // вызвать функции последовательно
+        // не зависимо от того того, сколько времени они выполняются?
+
+
+        var f1 = function() {
+            setTimeout(function(){
+                console.log(1);
+                next();
+            }, 100);
+        };
+        var f2 = function() {
+            setTimeout(function(){
+                console.log(2);
+                next();
+            }, 20);
+        };
+        var f3 = function() {
+            setTimeout(function(){
+                console.log(3);
+                next();
+            }, 10);
+        };
+
+
+    var queue = [f3, f1, f1],
+        i = 0;
+
+    var next = function() {
+        if (i < queue.length) {
+            i++;
+            queue[i-1]();
+        }
+    };
+
+    next();
+
+
+
+    // В ES5 появился новый механизм, назввается он Promise
+    // Обещания
+
+/*
+    var responseResult = true;
+
+    var promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (responseResult) {
+                resolve('Resolve');
+            } else {
+                reject('Reject');
+            }
+        }, 300)
+    });
+    promise.then(result => {
+        console.log(result)
+    })
+    .catch(result => {
+        console.log(result);
+    })
+*/
+
+
+    // Если нам надо получить результат
+    // работы цепочки событий
+
+    Promise.all([
+        Promise.resolve(3),
+        Promise.resolve(10),
+        Promise.resolve(1)
+    ])
+    .then(result => {
+        console.log(result);
+    })
+    .catch(result => {
+
+    });
+
+
+
+    </script>
+</body>

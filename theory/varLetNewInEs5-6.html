@@ -1,0 +1,344 @@
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <script>
+        // ES5, ES6. let, var
+        // Еще раз про всплытие
+        // let и const не всплывают
+        // перменные не существуют до того как были объявлены
+        //
+
+        /*
+        var a = 2;
+        {
+            let a = 3;
+            console.log(a);
+
+        }
+        console.log(a);
+*/
+         // const
+        // Имеется ввиду именно Константо.
+        // Может меняться, но не может менять тип
+
+        /*
+        const arr = [];
+
+        arr.push(4);
+        arr.push(5);
+
+        const arr = function(); // error
+*/
+
+        // В ES6 у нас появились стрелочные функции
+        /*
+        var fn = function() {
+            return 2+2;
+        }
+
+        // ==>
+
+        var fn = () => {
+            return 2+2;
+        }
+
+
+        // И если у вас функция возращает результат в одну строчку, то
+        // можно еще сократить
+
+        var fn = () => 2+2;
+
+        var fn = () => {
+          return 2+2;
+        }
+
+        console.log(fn());
+
+        // Стрелочные функции также связаны с this.
+        // Внутрь их передается внешнее значение this
+
+        // В данном случае теряется this
+        // для того, чтобы к ней обращаться, мы ее сохраним под другим именем
+        // и в следствии Замыкания она нам видна
+
+
+        var Person = function() {
+            let that = this;
+
+            setTimeout(function() {
+                console.log(this);
+                console.log(that);
+            }, 10)
+        }
+        new Person();
+
+
+        // Обратите внимание. Нельзя использовать стрелочную функцию
+        // как раньше, она не будет кнструктором!!
+
+
+        var Person = () => {
+            debugger;
+            console.lg(this);
+        }
+        new Person();
+
+
+       /*
+       var Person = function() {
+
+           setTimeout(() => {
+               console.log(this);
+           })
+       }
+       new Person();
+       */
+
+       // У нее также есть приоритет. Самый высокий
+       // Нельзя просто везде бездумно замениять классический вызов
+       // Обратите внимание.  В данном примере в someFn , this  - это window
+       // В в someTwoFn - то что мы передали в call()
+/*
+
+       var Person = (function() {
+          var that = this;
+
+           var someFn = () => {
+               debugger;
+               // Person {}
+               console.log(this, that); // obj
+           }
+           var someTwoFn = function() {
+                debugger;
+                console.log(this);
+           };
+           var obj = {
+               a: 'obj'
+           }
+           someFn.call(obj);
+           someTwoFn.call(obj);
+       })();
+*/
+
+
+
+
+      //
+      // В ES6 стало возможным передавать свойства в функции по умолчанию
+      //
+/*
+      var someFn = (name, value='2') => {
+          console.log(name, value)
+      }
+      someFn('kiss');
+  */
+
+      // Кроме этого появилась явная возможность передать аргументы функции
+
+/*
+      var someFn = function() {
+          console.log(arguments);
+      }
+
+
+     /*
+      var someFn = () => {
+          console.log(arguments);
+      }
+    */
+/*
+
+      var someFn = (...args) => {
+        debugger;
+          console.log(args);
+      }
+
+
+      someFn(1,2,3,'some')
+
+*/
+      //
+      // Появилось возможность короткой записи свойств объектов
+      //
+
+/*
+      var some = '';
+
+      var foo = '';
+
+      var obj = {
+        some: some,
+        foo: foo
+      }
+
+
+      var obj = {
+        some,
+        foo
+      }
+
+
+      function some(a, b, c) {
+          return {
+              a,
+              b,
+              c
+          }
+      }
+      console.log(some('a', 'b', 'c'));
+*/
+
+      // Деструкторизация массиво и объектов.
+      // Очень полезная функцияф
+      // Позволяет более компактро и проще работать с массивами и объектами
+      // с нотациями
+
+/*
+      var foo = function() {
+          return [1, 2, 3]
+      }
+      var [a,b,c] = foo();
+
+
+      console.log(a, b, c);
+
+      var {a, b, c} = some(3, 2, 1);
+      console.log(a, b, c);
+
+*/
+
+      //
+      //  Появилось новое ключевое слово super
+      //  super объектом назваютю объект - родитель
+      //  Или на манер JS объект - прототип
+      //
+
+/*
+      var parent = {
+          some() {
+              console.log('parent method');
+          }
+      }
+      var child = {
+          some() {
+              super.some();
+              console.log('children method');
+          }
+      }
+
+      Object.setPrototypeOf(child, parent);
+      child.some();
+*/
+
+
+     //
+     // Кроме всего у нас появляются новые методы у Стандартного объекта Object
+     //
+     //
+   /*
+     Object.assign({one: 'one'}, {some: 'some'}); // создает новые объект путем копирования из исходного в целовой
+     Object.create(prototype); // создает новый объект с
+
+
+     Object.getPrototypeOf(..);
+     Object.setPrototypeOf(.., ...);
+
+
+
+     // было
+     var Person = function() {
+
+     }
+     Person.prototype.run = function() {
+         console.log('old person run');
+     }
+     Person.prototype.isHuman = true;
+
+     var piple = new Person();
+
+     console.log(piple.isHuman, piple.run());
+
+     // Стало
+     var Person = {
+         isHuman: true,
+         run: () => {
+             console.log('new person run')
+         }
+     };
+     var piple = Object.create(Person);
+
+     console.log(piple.isHuman, piple.run());
+
+*/
+    //
+    // Ну и последнее. В ES6 появился новый синтаксис для классов
+    // И есть отличие между классической моделью и новой
+    // Различия в поведении. Но все это больше похоже на
+    // ситаксический сахар. Внутри все та же прототипная модель
+    //
+
+/*
+    class Piple {
+        constructor(name) {
+            this.name = name;
+        }
+        say() {
+           console.log(this.name)
+        }
+        static run() {
+            console.log(`piple ${this.name} run`);
+        }
+    }
+
+    Piple.run(); // Good
+
+    var piple = new Piple('Vladimir');
+    piple.say();
+
+    // piple.run(); Error
+
+    // ОБратите внимание на новое ключевое словов static
+    // Вызывается без создания экземпляра
+    // Если экземпляр создан, то его вызвать уже нельзя
+
+
+    */
+
+   class Piple {
+       name = 'Piple';
+
+       constructor(name) {
+           this.name = name;
+       }
+       say(word = '') {
+           console.log(`${this.name} now say ${word}`);
+       }
+   }
+
+   class SuperPiple extends Piple {
+       age = 20;
+       #power = 1000; // private
+
+       constructor(name, age = 21) {
+           super(name); // Вызываем конструктор родителя
+           this.age = age;
+       }
+       run() {
+           super.say('Lets go');
+           console.log(`${this.name} now run `);
+       }
+       set name(v) {
+           this.name = v;
+       }
+   }
+
+
+
+   var superPiple = new SuperPiple('Vladimir');
+   superPiple.say();
+   superPiple.name = 'Big Vladimir'
+   superPiple.run();
+
+    </script>
+</body>

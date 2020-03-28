@@ -1,0 +1,161 @@
+// 1. Базовые типы и их приведение к Объектам
+/*
+console.log('string');
+console.log(12);
+
+console.log(String('string'));
+console.log(Number(12));
+
+console.log('string' == String('string'));
+console.log('string' === String('string')); // True Важно!
+
+console.dir(new String('string'));
+console.dir(new Object());
+
+
+
+console.log(new String('string').__proto__.__proto__, new Object().__proto__)
+
+*/
+
+
+
+ // var Поднятие
+ //
+
+/*
+var a = function() {
+  console.log(a);
+
+  var a = 10; // область видимости функция
+}
+
+a();
+
+
+var b = function() {
+
+  for (let i=0; i<10; i++) {
+    console.log(i);
+  }
+  console.log(i); // i is not define
+}
+
+
+b();
+
+*/
+///  Область видимости и замыкания
+/*
+
+let a = function() {
+  var b = 10;
+
+  var c = function() {
+    return b + 10; // b доступна из С
+  }
+
+  return c();
+}
+
+
+console.log(a());
+*/
+
+
+
+// потеря this
+// и стрелочные функции
+
+/*
+let a = {
+  a: function() {
+    console.log('a', this);
+      var that = this;
+
+    setTimeout(function() {
+      console.log(1, that);;
+    }, 1)
+  },
+  b: function() {
+    console.log('b', this);
+
+
+
+    setTimeout(() => {
+      console.log(2, this);
+    }, 1)
+  }
+}
+
+a.a();
+a.b();
+
+*/
+
+
+// Прототипы
+
+/*
+let a = function(a, b) {
+  this.a = a;
+  this.b = b;
+};
+
+// как функция a ничего не возращает Undegined
+// this внутри функции указывает на Window. Поэтому
+// this.a = и this.b = это будут новые свойства в window
+
+let b = a(1, 2);
+
+
+// Если так вызывать, то вызывается конструктор и конструктором
+// является сама функция
+// Создается объект. this указывает на объект
+
+let c = new a(1, 2);
+
+console.log(b, c);
+*/
+
+// Если пишется с маленькой буквы, то это
+// переменная/ Если пишется с большой - то это как правило название класса
+// Тут я написал с большой. Я хочу в последствии сделать из это функции Класс
+var Panel = function() {
+
+}
+
+// Так описывать прототип не рекомендуется,
+// потому что теряется конструктор
+// При определенных ситуациях это может привести к ошибкам
+// PS: В ES5 уже это исправлено. На современных броузерах работает
+//
+Panel.prototype = {
+  a: function() {
+
+  },
+  b: function() {
+
+  }
+}
+
+// В целом такой вариант более предпочтитетел
+Panel.prototype.a = function() {
+  console.log('a');
+}
+Panel.prototype.b = function() {
+  console.log('b');
+}
+
+
+var SuperPanel = function() {
+  this.a = function() {
+    console.log('aa')
+  }
+}
+SuperPanel.prototype = new Panel();
+
+var superPanel = new SuperPanel();
+debugger;
+superPanel.a();
+superPanel.b();

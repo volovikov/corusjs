@@ -1,0 +1,158 @@
+
+// Паттерны проектирование
+
+
+// Фабрика
+
+function addMixin(sourceObject, mixin) {
+  for (let k in mixin) {
+    sourceObject.prototype[k] = mixin[k];
+  }
+}
+
+var commonUserFunction - {
+    say: function() {
+      consolte.log(`say ${this.name}`)
+    },
+    run: function() {
+      console.log(`run ${this.user}`);
+    }
+}
+
+var User = function() {
+
+}
+var AdvencedUser = function() {
+
+}
+AdvencedUser.prototype.fly = function() {
+
+}
+
+addMixin(User, commonUserFucntion);
+addMixin(AdvencedUser, commonUserFunction);
+
+new User();
+new AdvencedUser();
+
+
+
+
+
+User.prototy
+AdvenceUser.protoru =
+
+var User = function() {
+
+}
+User.prototype.say = function(what) {
+  console.log(what)
+}
+
+
+
+
+
+
+
+var user = new User();
+
+
+
+/*
+
+- Модуль
+- IIFE (самозапускаемая функйия)
+
+
+*/
+
+// Сингетон
+// Идея этого паттерна следующая. Обращаемся к некой функции. Функция, в случа, если есть
+// такой объект, возращает его. Если нет - создает
+
+/*
+let someObject = null;
+
+function SomeObjectSingleton(a, b) {
+  if (someObject) {
+    return someObject;
+  }
+  else {
+    someObject = this; // это функция - конструктор
+  }
+  this.a = a;
+  this.b = b;
+
+  return someObject;
+}
+
+a = new SomeObjectSingleton(1, 2);
+b = new SomeObjectSingleton(3, 4);
+
+console.log(a);
+console.log(b);
+
+console.log(a === b)
+
+*/
+
+// Фабрика
+// Задавча фабрики отдавать вам стандартные типовые объекты,
+// со стандартными интерфейсам
+
+/*
+var Fabric = function() {
+  var Monitor = function(uuid) {
+    this.uuid = uuid;
+  };
+  Monitor.prototype.on = function() {
+    //
+  };
+  var Computer = function(uuid) {
+    this.uuid = uuid;
+  };
+  Computer.prototype.on = function() {
+    //
+  };
+  this.getMonitor = function(uuid) {
+    return new Monitor(uuid);
+  };
+  this.getComputer = function(uuid) {
+    return new Computer(uuid);
+  }
+}
+
+let fabric = new Fabric();
+
+console.log(fabric.getMonitor('sjsjo2993'));
+console.log(fabric.getComputer('s1jjd'));
+*/
+
+// Паттерн Декоратор
+// Его задача "декорировать". Это тоже самое, но немного подкрашшеное
+//
+
+/*
+var Computer = function(uuid) {
+  this.uuid = uuid;
+}
+Computer.prototype.getCost = function() {
+  return 3000;
+}
+var computer = new Computer(1245);
+
+function setNewCalcProcedure(computer) {
+  var originalCost = computer.getCost();
+
+  computer.getCost = function() {
+    return originalCost + 1000;
+  }
+}
+
+console.log(computer.getCost()); // 3000
+
+setNewCalcProcedure(computer);
+
+console.log(computer.getCost()); // 4000
+*/
