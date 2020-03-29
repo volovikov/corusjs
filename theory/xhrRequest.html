@@ -140,9 +140,28 @@
             console.log(data);
         });
 
+        // Headers content-type 
         // 
+        1. text/html; charset=utf-8 - передаем html или просто текст
+        2. multipart/form-data - отправка файлов, как правило через <form></form>
+        3. application/json - отправляем json 
+        4. картинки image/gif, video/mp4, audio/mp3 
 
 
+        // Методы POST передают информацию в Body 
+        // данные в телом можно положить с помощью 
+        arrayBuffer()
+        blob()
+        json()
+        text()
+        formData()
+
+        const form = new FormData(document.getElementById('login-form'));
+        
+        fetch('/login', {
+            method: 'POST',
+            body: form
+        });
 
     </script>        
 </body>
