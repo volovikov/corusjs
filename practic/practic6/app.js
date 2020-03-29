@@ -1,70 +1,36 @@
 var app = (function Application(rootDomEl) {
-  var u = window.utils,
-      applicationInstance = null;
-
-  var getApplicationInstance = function() {
-   if (!applicationInstance) {
-     applicationInstance = new App;
-   }
-   return applicationInstance;
-  }
-
-  class App {
-    init(rootDomEl, callback) {
-      var core = [
-        {
-          url: 'core/bus.js',
-          key: 'bus'
-        },
-        {
-          url: 'core/fabric.js',
-          key: 'fabric'
-        },
-        {
-          url: 'core/router.js',
-          key: 'router'
-        }
-      ];
-      this.load(core, () => callback && callback())
+    var u = window.utils,
+        applicationInstance = null;
+  
+    var getApplicationInstance = function() {
+     if (!applicationInstance) {
+       applicationInstance = new App;
+     }
+     return applicationInstance;
     }
+  
+    class App {
+      ready(rootDomEl) {
+        return this.loadFabric()
+            .then((fabric) => {
+                fabric.ready()
+                    .then((fabric) => {
+                        console.log(fabric)
+                    })
+            })
+      }
 
-    getBus() {
-      return this.bus;
+      loadFabric() {
+        return u.loadComponent('fabric.js', 'fabric')
+      }  
+
+      
     }
-
-    getRouter() {
-      return this.router;
-    }
-
-    getFabric() {
-      return this.fabric;
-    }
-
-    run() {
-      console.log(this);
-    }
-
-    load(componentList, callback) {
-      var chain = [];
-
-      componentList.forEach(v => {
-        var {key, url} = v;
-
-        chain.push((firstFn, lastFn, nextFn) => {
-          u.loadComponent(url, key, (component) => {
-            this[key] = component;
-            nextFn && nextFn();
-          })
-        });
-      });
-      u.chain.afterLastFunctonRun(callback);
-      u.chain.setChainList(chain);
-      u.chain.run();
-    }
-  }
-  return getApplicationInstance();
-})()
-
-app.init('#root', () => {
-  app.run();
-});
+    return getApplicationInstance();
+  })()
+  
+  app.ready()
+    .then(() => {
+        console.log(app)
+    })
+  

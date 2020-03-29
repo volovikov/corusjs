@@ -1,7 +1,5 @@
-class Table {
-
-  constructor() {
-    
-  }
-
-}
+var table = function table() {
+    class Table {
+    }
+    return Table;    
+};
