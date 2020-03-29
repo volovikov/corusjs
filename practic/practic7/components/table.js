@@ -1,7 +1,6 @@
-class Table {
+var table = function table() {
+    class Table {
 
-  constructor() {
-    
-  }
-
-}
+    }
+    return new Table();    
+};

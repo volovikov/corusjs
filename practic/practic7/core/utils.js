@@ -48,11 +48,11 @@ var utils = {
   isNan: function() {
 
   },
-  loadComponent: function(url, key) {    
+  loadComponent: function(url, key, callback) {    
     var script = document.createElement('script');
 
     script.onload = () => callback && callback(
-      window[key]()
+      window[key]// На запускаю функцию!
     );
     script.src = url;
     document.head.appendChild(script);    

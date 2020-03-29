@@ -1,0 +1,148 @@
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <script>
+        // Просто запрос
+/*
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET', 'localhost', true);
+
+        xhr.onload = function() {
+            alert( this.responseText );
+        }
+
+        xhr.onerror = function() {
+            alert( 'Ошибка ' + this.status );
+        }
+
+        xhr.send();
+*/
+
+        // Запрсо на другой домен 
+/*
+        var xhr = new XMLHttpRequest();
+        
+        xhr.open('GET', 'http://anywhere.com/request', true);
+
+        xhr.onload = function() {
+            alert( this.responseText );
+        }
+
+        xhr.onerror = function() {
+            alert( 'Ошибка ' + this.status );
+        }
+
+        xhr.send();
+*/
+        // Можно также получитб процент, объем переданных данных
+/*
+        xhr.onprogress = function(event) {
+
+        }
+*/
+        // Статусы 
+/*
+        xhr.onload = function() {
+            xhr.status != 200
+
+            // 200 - хорошо
+            // 201 - создано
+            // 202 - accepter
+            // 400 - не верный запрос. 
+            // 401 - не авторизован
+            // 404 - не авторизован
+            // 405 - метод не поддерживается
+            // 500 - Внутренняя ошибока сервере
+        }
+*/
+        // REST JSON Api
+        // Передача состояния представления
+
+        // Типы запроса
+/*        
+        xhr.open('GET', 'http://anywhere.com/request', true);
+        GET, POST, PUT, DELETE
+*/
+        // Технически мы можем строить архитектуру 
+        // API исползуюя и статусы и Тип запроса
+  /*      
+        /serverUrl/api/{version}/user/list
+        /serverUrl/api/{version}/user/get
+        /serverUrl/api/{version}/user/update
+        /serverUrl/api/{version}/user/add
+        /serverUrl/api/{version}/user/delete
+
+
+        // Можно натации, наращивать адрес
+        /serverUrl/api/{version}/user/role/list
+        /serverUrl/api/{version}/user/role/get
+        /serverUrl/api/{version}/user/role/update
+        /serverUrl/api/{version}/user/role/add
+        /serverUrl/api/{version}/user/role/delete
+
+        // Бывают вариант построения с динамическим адресом
+
+        GET /serverUrl/api/{version}/user/[:id]/get
+        GET /serverUrl/api/{version}/user/list                
+        POST /serverUrl/api/{version}/user/update
+        POST /serverUrl/api/{version}/user/add
+        DELETE /serverUrl/api/{version}/user/delete
+*/
+
+        // Указываем что нужно на другой адрес передавать также Куки
+        
+        //xhr.withCredentials = true;
+
+        // при этом сервер должен в ответе разрешить их предевать. Подвердить 
+        // В заголовке 
+        // Access-Control-Allow-Credentials: true
+
+         // 
+         // Не разрешено 
+         //
+        fetch('http://mail.ru')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+            });
+
+        // Кроссдоменный запрос. Разрешон. Ошибка серверв
+        // ответ 405 - Method Not Allowed
+
+        fetch('http://karatespb.ru/private/submit')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+            });
+
+
+
+        fetch('http://karatespb.ru/private/submit', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                instructorId: 1,
+                password: 'some'
+            }) 
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+        });
+
+        // 
+
+
+
+    </script>        
+</body>

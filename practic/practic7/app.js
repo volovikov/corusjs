@@ -10,34 +10,34 @@ var app = (function Application(rootDomEl) {
   }
 
   class App {
-    init(rootDomEl, callback) {
+    ready(rootDomEl, callback) {
       var core = [
         {
           url: 'core/bus.js',
           key: 'bus'
         },
         {
-          url: 'core/fabric.js',
-          key: 'fabric'
-        },
-        {
           url: 'core/router.js',
           key: 'router'
-        }
+        },
+        {
+          url: './components/layout.js',
+          key: 'layout'
+        },        
+        {
+          url: './components/panel.js',
+          key: 'panel'
+        },
+        {
+          url: './components/table.js',
+          key: 'table'
+        },
+        {
+          url: './components/menu.js',
+          key: 'menu'
+        },
       ];
       this.load(core, () => callback && callback())
-    }
-
-    getBus() {
-      return this.bus;
-    }
-
-    getRouter() {
-      return this.router;
-    }
-
-    getFabric() {
-      return this.fabric;
     }
 
     run() {
@@ -68,6 +68,6 @@ var app = (function Application(rootDomEl) {
   return getApplicationInstance();
 })()
 
-app.init('#root', () => {
+app.ready('#root', () => {
   app.run();
 });
